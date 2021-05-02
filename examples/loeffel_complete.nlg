@@ -1,0 +1,14 @@
+%
+    %Subjekt hat %Objekt %Ortsergaenzung ~Praedikat
+    %Ortsergaenzung hat %Subjekt den ~Praedikat
+
+%Subjekt
+    hund
+
+~Praedikat
+    nehmen
+
+%Objekt
+    loeffel
+
+%Ortsergaenzung

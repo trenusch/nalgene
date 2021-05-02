@@ -5,6 +5,7 @@ node_types = {
     '$': 'value',
 }
 
+
 class Node:
     def __init__(self, key):
         self.type = 'word'
@@ -214,4 +215,3 @@ class Node:
         else:
             parent_line = [self.key] + parent_line
             return self.parent.has_parent(type, parent_line)
-

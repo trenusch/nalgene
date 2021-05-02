@@ -1,6 +1,7 @@
-from nalgene.parse import *
+from parse import *
 import os
 import json
+
 
 # Generate tokens up to $value level
 
@@ -8,7 +9,19 @@ def walk_tree(root, current, context, start_w=0):
     # print('\n[%d walk_tree]' % start_w, '"' + current.key + '"', 'context', context)
 
     try:
-        seq = random.choice(current)
+        # evaluate chance node for weights
+        if current.key.endswith("!"):
+            weights = []
+            for child in current:
+                try:
+                    pos = len(child.raw_str) - child.raw_str.index('.') + 1
+                    weights.append(float(child.raw_str[-pos: -1]))
+                except Exception as e:
+                    print("No activation found")
+                    raise e
+            seq = random.choices(current, weights, k=1)[0]
+        else:
+            seq = random.choice(current)
     except Exception as e:
         print('Exception walking from current', current, context)
         raise e
@@ -27,12 +40,14 @@ def walk_tree(root, current, context, start_w=0):
     for child in seq:
         # print('[%d walk_tree child]' % start_w, child)
         child_key = child.key
-
         # Optionally skip optional tokens
         if child_key.endswith('?'):
             child_key = child_key[:-1]
             if random.random() < 0.5:
                 continue
+        if child_key.endswith('/'):
+            pos = child_key.index('.') - 1
+            child_key = child_key[:pos]
 
         # Expandable word, e.g. %phrase or ~synonym
         if child_key.startswith(('%', '~', '$', '@')):
@@ -43,7 +58,7 @@ def walk_tree(root, current, context, start_w=0):
                 if sub_context is not None: print('sub context', sub_context)
 
             except Exception:
-                #print('[ERROR] Key', child_key, 'not in', context)
+                # print('[ERROR] Key', child_key, 'not in', context)
                 sub_context = None
 
             try:
@@ -86,14 +101,18 @@ def walk_tree(root, current, context, start_w=0):
 
     return flat, tree
 
+
 def fix_sentence(sentence):
     return fix_capitalization(fix_punctuation(fix_newlines(fix_spacing(sentence))))
+
 
 all_punctuation = ',.!?'
 end_punctuation = '.!?'
 
+
 def fix_capitalization(sentence):
     return ''.join(map(lambda s: s.capitalize(), re.split(r'([' + end_punctuation + ']\s*)', sentence)))
+
 
 def fix_punctuation(sentence):
     fixed = re.sub(r'\s([' + all_punctuation + '])', r'\1', sentence).strip()
@@ -101,11 +120,14 @@ def fix_punctuation(sentence):
         fixed = fixed + '.'
     return fixed
 
+
 def fix_newlines(sentence):
     return re.sub(r'\s*\\n\s*', '\n\n', sentence).strip()
 
+
 def fix_spacing(sentence):
     return re.sub(r'\s+', ' ', sentence)
+
 
 def generate_from_file(base_dir, filename, root_context=None):
     if root_context is None:
@@ -113,7 +135,7 @@ def generate_from_file(base_dir, filename, root_context=None):
     parsed = parse_file(base_dir, filename)
     parsed.map_leaves(tokenizeLeaf)
     walked_flat, walked_tree = walk_tree(parsed, parsed['%'], root_context['%'])
-    # print(walked_flat)
+    #print(walked_flat)
     print('>', fix_sentence(walked_flat.raw_str))
     print(walked_tree)
     print('-' * 80)
@@ -127,11 +149,10 @@ if __name__ == "__main__":
     filename = os.path.realpath(sys.argv[1])
     base_dir = os.path.dirname(filename)
     filename = os.path.basename(filename)
+    #test_json = json.load(open('test2.json'))
+    #root_context = Node('%').add(parse_dict(test_json))
 
-    test_json = json.load(open('test2.json'))
-    root_context = Node('%').add(parse_dict(test_json))
-
-    generate_from_file(base_dir, filename)#, root_context)
+    generate_from_file(base_dir, filename)  # , root_context)
 
 # else:
 #     filename = sys.argv[1]

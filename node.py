@@ -215,3 +215,6 @@ class Node:
         else:
             parent_line = [self.key] + parent_line
             return self.parent.has_parent(type, parent_line)
+
+    def remove_child(self, child):
+        self.children.remove(child)

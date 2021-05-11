@@ -1,0 +1,15 @@
+%
+    $subject hat $object $action
+    $subject hat $object $location! $action
+    $location! hat $subject $object $action
+
+$subject
+
+
+$object
+
+
+$action
+
+
+$location!

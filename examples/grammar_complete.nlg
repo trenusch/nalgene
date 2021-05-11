@@ -1,0 +1,17 @@
+%
+    $subject hat $object $action
+    $subject hat $object $location! $action
+    $location! hat $subject $object $action
+
+$subject
+    der hund
+
+$object
+    den loeffel
+
+$action
+    genommen
+
+$location!
+    gewoelbt1./
+    unten1./

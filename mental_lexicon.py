@@ -12,8 +12,10 @@ class MentalLexicon:
         return item in self.words
 
     def from_word(self, word):
-        return [item for item in self.items if item.value == word][0]
-
+        try:
+            return [item for item in self.items if item.value == word][0]
+        except IndexError as e:
+            return None
 
 class Subject:
     def __init__(self, genus, value, known=False):

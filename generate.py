@@ -135,24 +135,26 @@ def generate_from_file(base_dir, filename, root_context=None):
     parsed = parse_file(base_dir, filename)
 
     # remove sentences using phrases not given
-    for child in parsed:
-        if child.is_leaf:
-            to_remove = []
-            for c in parsed['%']:
-                if child.raw_str in c.raw_str:
-                    to_remove.append(c)
-            for c in to_remove:
-                parsed['%'].remove_child(c)
+    children = [child.split(' ')[0] for child in parsed if child.split(' ')[0] != '%']
+    to_remove = []
+    for sentence in parsed['%']:
+        sentence_split = sentence.raw_str.split(' ')
+        sentence_split.remove('hat')    # quick fix for perfect
+        for value in sentence_split:
+            if value not in children:
+                to_remove.append(sentence)
+    for sentence in to_remove:
+        parsed['%'].remove_child(sentence)
 
     # remove sentences not using all given phrases
     for child in parsed:
         if not child.is_leaf and child.split(' ')[0] != '%':
             to_remove = []
-            for c in parsed['%']:
-                if child.split(' ')[0] not in c.raw_str:
-                    to_remove.append(c)
-            for c in to_remove:
-                parsed['%'].remove_child(c)
+            for sentence in parsed['%']:
+                if child.split(' ')[0] not in sentence.raw_str:
+                    to_remove.append(sentence)
+            for sentence in to_remove:
+                parsed['%'].remove_child(sentence)
 
     parsed.map_leaves(tokenizeLeaf)
 

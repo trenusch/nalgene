@@ -2,7 +2,10 @@ from generate import *
 
 """
     parses grammar file and adds specific entries given in the input
+    first version using one entity object only
 """
+
+
 def produce(input, mental_lexicon):
     subjects = [json.loads(item) for item in input if json.loads(item)["proposition"] == "subject"]
     entities = [json.loads(item) for item in input if json.loads(item)["proposition"] == "entity"]
@@ -80,17 +83,18 @@ def produce(input, mental_lexicon):
     filename = os.path.basename(filename)
     generate_from_file(base_dir, filename)  # , root_context)
 
+
 """
     creates grammar file + output sentences for every subject given
     adds entries for objects / actions specified in subject
 """
+
+
 def produce_multiple(input, mental_lexicon):
     subjects = [json.loads(item) for item in input if json.loads(item)["proposition"] == "subject"]
-    entities = [json.loads(item) for item in input if json.loads(item)["proposition"] == "entity"]
-    attributes = [json.loads(item) for item in input if json.loads(item)["proposition"] == "property"]
     positions = [json.loads(item) for item in input if json.loads(item)["proposition"] == "relpos"]
-    relation = [json.loads(item) for item in input if json.loads(item)["proposition"] == "part_of"]
-
+    properties = [json.loads(item) for item in input if json.loads(item)["proposition"] == "property"]
+    relations = [json.loads(item) for item in input if json.loads(item)["proposition"] == "part_of"]
     for item in subjects:
         file = open("examples/grammar2.nlg", "r")
         file_write = open("examples/grammar2_complete.nlg", "w")
@@ -123,8 +127,9 @@ def produce_multiple(input, mental_lexicon):
         file_write.write("\n")
 
         try:
-            for i in range(len(item['entity'])):
-                object = item['entity'][i]
+            for i in range(len(item['entity'])):  # in case of multiple entities, e.g.
+                # "er hat mit dem loeffel die suppe gegessen"
+                # additionally, the "laffe" entity could also be in the list as a second object
                 file_write.write("$object" + str(i) + "\n")
                 if mental_lexicon.contains_word(item['entity'][i]):
                     if mental_lexicon.from_word(item['entity'][i]).genus == 'm':
@@ -141,23 +146,32 @@ def produce_multiple(input, mental_lexicon):
                             file_write.write("    " + attribute.value + "\n")
                 file_write.write("\n")
 
-                """file_write.write("$location" + str(i) + "!\n")
-                for pos in positions + attributes:
-                    if pos['rel_entity'] == object:
-                        if mental_lexicon.contains_word(pos['attribute']):
-                            file_write.write("    " + pos['attribute'] + str(pos["activation"]) + "/\n")
-                for rel in relation:
-                    if rel['rel_entity'] == object:
-                        if mental_lexicon.contains_word(rel["entity"]):
-                            file_write.write("    an der " + rel['entity'] + str(rel["activation"]) + "/\n")
-                        else:
-                            attributes_rel = mental_lexicon.from_word(rel['entity']).attributes
-                            for attribute in attributes_rel:
-                                if mental_lexicon.contains_word(attribute.value):
-                                    file_write.write("    " + attribute.value + "1./\n")
-                file_write.write("\n")"""
+                # should attributes are mentioned if no part_of relation given?
+                # -> missing semantic information, i.e. what kind of additional information is given,
+                # e.g. where or how (an der laffe vs. mit dem loeffel)
 
-        except KeyError as e:
+                attributes = [att for att in positions + relations + properties
+                              if att['rel_entity'] == item['entity'][i]]
+                if len(attributes) != 0:
+                    file_write.write("$location" + str(i) + "!\n")
+                    for att in attributes:
+                        if att['proposition'] == 'property' and mental_lexicon.contains_word(att["attribute"]):
+                            file_write.write("    am " + att['attribute'] + "en" + str(att["activation"]) + "/\n")
+                        elif att['proposition'] == 'relpos' and mental_lexicon.contains_word(att["attribute"]):
+                            file_write.write("    " + att['attribute'] + str(att["activation"]) + "/\n")
+                        elif att['proposition'] == 'part_of':
+                            if mental_lexicon.contains_word(att['entity']):
+                                file_write.write("    an ")
+                                file_write.write("der ") if mental_lexicon.from_word(att['entity']).genus == 'f' \
+                                    else file_write.write("dem ")
+                                file_write.write(att['entity'] + str(att["activation"]) + "/\n")
+                            else:
+                                attributes_rel = mental_lexicon.from_word(att['entity']).attributes
+                                for attribute in attributes_rel:  # add all attributes known in lexicon
+                                    if mental_lexicon.contains_word(attribute.value):
+                                        file_write.write("    " + attribute.value + "1./\n")
+
+        except KeyError:
             file_write.write("\n")
         file_write.close()
         file.close()

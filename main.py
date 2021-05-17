@@ -15,7 +15,7 @@ if __name__ == '__main__':
     dog_in = {"proposition": "subject",
               "subject": "hund",
               "attribute": "-",
-              "entity": ["loeffel", "laffe"],
+              "entity": ["loeffel"],
               "action": "nehmen",
               "activation": 2.4,
               "infostate": "new"}
@@ -78,8 +78,8 @@ input.append(json.dumps(loeffel_in))
 input.append(json.dumps(laffe_in))
 input.append(json.dumps(relation_in))
 #input.append(json.dumps(dog_in2))
-# input.append(json.dumps(attribute1_in))
-# input.append(json.dumps(attribute2_in))
-# input.append(json.dumps(relpos_in))
-produce(input, mental_lexicon)
-#produce_multiple(input, mental_lexicon)
+#input.append(json.dumps(attribute1_in))
+#input.append(json.dumps(attribute2_in))
+#input.append(json.dumps(relpos_in))
+#produce(input, mental_lexicon)
+produce_multiple(input, mental_lexicon)

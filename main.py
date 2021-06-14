@@ -1,5 +1,6 @@
 from application import *
 from mental_lexicon import *
+from words import *
 
 if __name__ == '__main__':
     # specify input of the system
@@ -55,10 +56,12 @@ if __name__ == '__main__':
     loeffel = Entity('m', "loeffel", known=True)
     nehmen = Action("nehmen", "genommen", known=True)
     laffe = Entity('f', "laffe")
-    unten = Attribute(laffe, "unten", known=True)
-    gewölbt = Attribute(laffe, "gewoelbt", known=True)
-    laffe.add_attributes(gewölbt)
+    unten = Attribute(laffe, "unten", "position", known=True)
+    gewoelbt = Attribute(laffe, "gewoelbt", "shape", known=True)
+    rund = Attribute(laffe, "rund", "shape", known=True)
+    laffe.add_attributes(gewoelbt)
     laffe.add_attributes(unten)
+    laffe.add_attributes(rund)
     essen = Action("essen", "gegessen", known=True)
     suppe = Entity('f', "suppe", known=True)
 
@@ -68,18 +71,19 @@ if __name__ == '__main__':
     mental_lexicon.add_item(loeffel)
     mental_lexicon.add_item(nehmen)
     mental_lexicon.add_item(laffe)
-    mental_lexicon.add_item(unten)
-    mental_lexicon.add_item(gewölbt)
+    #mental_lexicon.add_item(unten)
+    mental_lexicon.add_item(gewoelbt)
+    mental_lexicon.add_item(rund)
     mental_lexicon.add_item(essen)
     mental_lexicon.add_item(suppe)
+
 
 input.append(json.dumps(dog_in))
 input.append(json.dumps(loeffel_in))
 input.append(json.dumps(laffe_in))
 input.append(json.dumps(relation_in))
-#input.append(json.dumps(dog_in2))
-#input.append(json.dumps(attribute1_in))
-#input.append(json.dumps(attribute2_in))
+input.append(json.dumps(attribute1_in))
+input.append(json.dumps(attribute2_in))
 #input.append(json.dumps(relpos_in))
-#produce(input, mental_lexicon)
+#input.append(json.dumps(dog_in2))
 produce_multiple(input, mental_lexicon)

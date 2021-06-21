@@ -1,8 +1,11 @@
 from application import *
 from mental_lexicon import *
 from words import *
+import ipaaca
 
 if __name__ == '__main__':
+
+
     # specify input of the system
     input = []
 
@@ -34,23 +37,29 @@ if __name__ == '__main__':
                    "rel_entity": "loeffel",
                    "activation": 1.99}
 
-    attribute1_in = {"proposition": "property",
+    attribute_rund_in = {"proposition": "property",
                      "entity": "laffe",
                      "rel_entity": "loeffel",
                      "attribute": "rund",
                      "activation": 4.00}
 
-    attribute2_in = {"proposition": "property",
+    attribute_gewoelbt_in = {"proposition": "property",
                      "entity": "laffe",
                      "rel_entity": "loeffel",
                      "attribute": "gewoelbt",
                      "activation": 3.00}
 
-    relpos_in = {"proposition": "relpos",
+    relpos_unten_in = {"proposition": "relpos",
                  "entity": "laffe",
                  "rel_entity": "loeffel",
                  "attribute": "unten",
                  "activation": 5.00}
+
+    direction_in = {"proposition": "direction",
+                    "entity": "laffe",
+                    "rel_entity": "loeffel",
+                    "attribute": "unten",
+                    "activation": 1.00}
 
     hund = Subject('m', "hund", known=True)
     loeffel = Entity('m', "loeffel", known=True)
@@ -71,7 +80,7 @@ if __name__ == '__main__':
     mental_lexicon.add_item(loeffel)
     mental_lexicon.add_item(nehmen)
     mental_lexicon.add_item(laffe)
-    #mental_lexicon.add_item(unten)
+    mental_lexicon.add_item(unten)
     mental_lexicon.add_item(gewoelbt)
     mental_lexicon.add_item(rund)
     mental_lexicon.add_item(essen)
@@ -81,9 +90,10 @@ if __name__ == '__main__':
 input.append(json.dumps(dog_in))
 input.append(json.dumps(loeffel_in))
 input.append(json.dumps(laffe_in))
-input.append(json.dumps(relation_in))
-input.append(json.dumps(attribute1_in))
-input.append(json.dumps(attribute2_in))
-#input.append(json.dumps(relpos_in))
-#input.append(json.dumps(dog_in2))
+#input.append(json.dumps(relation_in))
+input.append(json.dumps(attribute_rund_in))
+input.append(json.dumps(attribute_gewoelbt_in))
+#input.append(json.dumps(relpos_unten_in))
+input.append(json.dumps(direction_in))
+input.append(json.dumps(dog_in2))
 produce_multiple(input, mental_lexicon)

@@ -1,3 +1,5 @@
+import random
+import numpy as np
 from parse import *
 import os
 import json
@@ -19,7 +21,13 @@ def walk_tree(root, current, context, start_w=0):
                 except Exception as e:
                     print("No activation found")
                     raise e
-            seq = random.choices(current, weights, k=1)[0]
+            weights = np.cumsum(weights)
+            number = random.random() * weights[-1]
+            i = 0
+            while number > weights[i]:
+                i += 1
+            seq = current[i]
+            # seq = random.sample(current, k=1)[0] , weights, k=1)[0]
         else:
             seq = random.choice(current)
     except Exception as e:
@@ -143,27 +151,38 @@ def generate_from_file(base_dir, filename, root_context=None):
         for value in sentence_split:
             if value not in children:
                 to_remove.append(sentence)
+                break
+
     for sentence in to_remove:
         parsed['%'].remove_child(sentence)
 
     # remove sentences not using all given phrases
+    to_remove = {}
     for child in parsed:
         if not child.is_leaf and child.split(' ')[0] != '%':
-            to_remove = []
             for sentence in parsed['%']:
                 if child.split(' ')[0] not in sentence.raw_str:
-                    to_remove.append(sentence)
-            for sentence in to_remove:
-                parsed['%'].remove_child(sentence)
+                    if sentence in to_remove.keys():
+                        to_remove[sentence] = to_remove[sentence] + 1
+                    else:
+                        to_remove[sentence] = 1
+    if len(to_remove) != len(parsed['%']):
+        for sentence in to_remove.keys():
+            parsed['%'].remove_child(sentence)
+    else:
+        minimum = min(to_remove.values())
+        for key in to_remove.keys():
+            if to_remove[key] > minimum:
+                parsed['%'].remove_child(key)
 
     parsed.map_leaves(tokenizeLeaf)
 
     walked_flat, walked_tree = walk_tree(parsed, parsed['%'], root_context['%'])
     #print(walked_flat)
-    print('>', fix_sentence(walked_flat.raw_str))
-    print(walked_tree)
-    print('-' * 80)
-    return parsed, walked_flat, walked_tree
+    #print('>', fix_sentence(walked_flat.raw_str))
+    #print(walked_tree)
+    #print('-' * 80)
+    return fix_sentence(walked_flat.raw_str)
 
 
 if __name__ == "__main__":

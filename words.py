@@ -1,26 +1,8 @@
-from abc import ABC
-
-
-class Words(ABC):
+class Words:
 
     def __init__(self, value, known=False):
         self.value = value
         self.known = known
-
-    def get_known(self):
-        return self.known
-
-    def set_known(self, value):
-        self.known = value
-
-    def get_value(self):
-        return self.value
-
-    def set_value(self, value):
-        self.value = value
-
-    def get_attributes(self):
-        return self.attributes
 
 
 class Subject(Words):
@@ -30,8 +12,6 @@ class Subject(Words):
         self.attributes = []
         self.genus = genus
 
-    def get_genus(self):
-        return self.genus
 
 
 class Entity(Words):
@@ -52,8 +32,6 @@ class Entity(Words):
     def add_attributes(self, attribute):
         self.attributes.append(attribute)
 
-    def get_genus(self):
-        return self.genus
 
 
 class Attribute(Words):
@@ -70,5 +48,3 @@ class Action(Words):
         self.value = value
         self.perfekt = perfekt
 
-    def get_perfekt(self):
-        return self.perfekt

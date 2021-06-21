@@ -44,7 +44,7 @@ def parse_string(base_dir, string):
             indexes.append(0)
         elif ind < last_ind:  # Up to next item in parent list
             diff = (last_ind - ind)
-            for i in range(last_ind - ind):
+            for i in range((int)(last_ind - ind)):
                 level -= 1
                 indexes.pop()
             indexes[level] += 1

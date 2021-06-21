@@ -79,7 +79,7 @@ class Node:
         self.iter_c = 0
         return self
 
-    def __next__(self):
+    def next(self):
         if self.iter_c >= len(self.children):
             raise StopIteration
         else:

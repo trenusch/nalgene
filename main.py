@@ -1,7 +1,7 @@
 from application import *
 from mental_lexicon import *
 from words import *
-import ipaaca
+#import ipaaca
 
 if __name__ == '__main__':
 
@@ -13,13 +13,18 @@ if __name__ == '__main__':
                "subject": "hund",
                "action": "essen",
                "infostate": "old",
-               "entity": ["suppe", "loeffel"]
+               "entity": "suppe"
     }
+
+    gabel_in = {"proposition": "entity",
+                "entity": "gabel",
+                "activation": 1.00,
+                "function": "modality"}
 
     dog_in = {"proposition": "subject",
               "subject": "hund",
               "attribute": "-",
-              "entity": ["loeffel"],
+              "entity": "loeffel",
               "action": "nehmen",
               "activation": 2.4,
               "infostate": "new"}
@@ -30,7 +35,8 @@ if __name__ == '__main__':
 
     laffe_in = {"proposition": "entity",
                 "entity": "laffe",
-                "activation": 2.01}
+                "activation": 2.01,
+                "function": "modality"}
 
     relation_in = {"proposition": "part_of",
                    "entity": "laffe",
@@ -64,7 +70,7 @@ if __name__ == '__main__':
     hund = Subject('m', "hund", known=True)
     loeffel = Entity('m', "loeffel", known=True)
     nehmen = Action("nehmen", "genommen", known=True)
-    laffe = Entity('f', "laffe")
+    laffe = Entity('f', "laffe", known=True)
     unten = Attribute(laffe, "unten", "position", known=True)
     gewoelbt = Attribute(laffe, "gewoelbt", "shape", known=True)
     rund = Attribute(laffe, "rund", "shape", known=True)
@@ -73,7 +79,7 @@ if __name__ == '__main__':
     laffe.add_attributes(rund)
     essen = Action("essen", "gegessen", known=True)
     suppe = Entity('f', "suppe", known=True)
-
+    gabel = Entity('f', "gabel", known=True)
 
     mental_lexicon = MentalLexicon()
     mental_lexicon.add_item(hund)
@@ -85,15 +91,17 @@ if __name__ == '__main__':
     mental_lexicon.add_item(rund)
     mental_lexicon.add_item(essen)
     mental_lexicon.add_item(suppe)
+    mental_lexicon.add_item(gabel)
 
 
 input.append(json.dumps(dog_in))
 input.append(json.dumps(loeffel_in))
 input.append(json.dumps(laffe_in))
-#input.append(json.dumps(relation_in))
+input.append(json.dumps(relation_in))
 input.append(json.dumps(attribute_rund_in))
 input.append(json.dumps(attribute_gewoelbt_in))
-#input.append(json.dumps(relpos_unten_in))
+input.append(json.dumps(relpos_unten_in))
 input.append(json.dumps(direction_in))
 input.append(json.dumps(dog_in2))
+input.append(json.dumps(gabel_in))
 produce_multiple(input, mental_lexicon)

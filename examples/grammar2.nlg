@@ -1,7 +1,7 @@
 %
-    $subject hat $object0 $action
-    $subject hat $object0 $location0! $action
-    $location0! hat $subject $object0 $action
+    $subject hat $object $action
+    $subject hat $object $location! $action
+    $location! hat $subject $object $action
     $subject hat $action
-    $subject hat $object0 $object1 $action
-    $subject hat $object0 $direction $action
+    $subject hat $object $modality! $action
+    $subject hat $object $modality! $direction $action

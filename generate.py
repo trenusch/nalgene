@@ -16,8 +16,11 @@ def walk_tree(root, current, context, start_w=0):
             weights = []
             for child in current:
                 try:
-                    pos = len(child.raw_str) - child.raw_str.index('.') + 1
-                    weights.append(float(child.raw_str[-pos: -1]))
+                    pos = 0
+                    while not child.raw_str[pos].isdigit():
+                        pos += 1
+
+                    weights.append(float(child.raw_str[pos: -1]))
                 except Exception as e:
                     print("No activation found")
                     raise e
@@ -54,7 +57,9 @@ def walk_tree(root, current, context, start_w=0):
             if random.random() < 0.5:
                 continue
         if child_key.endswith('/'):
-            pos = child_key.index('.') - 1
+            pos = 0
+            while not child.raw_str[pos].isdigit():
+                pos += 1
             child_key = child_key[:pos]
 
         # Expandable word, e.g. %phrase or ~synonym

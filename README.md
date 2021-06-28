@@ -18,8 +18,12 @@ Nalgene generates pairs of sentences and grammar trees by a random (or guided) w
 ## Usage
 
 ```
+$ mosquitto
+$ python Receiver.py
 $ python gui.py 
 ```
+Start mosquitto and the listener. Afterwards, start the gui which will send a message to the listener
+with the desired input (could also come from another module!). 
 Add the desired input in the first input box in the form of a dictionary, e.g.:
 
 * {"proposition": "subject", "subject": "hund", "action": "nehmen", "activation": 1.40}
@@ -35,15 +39,17 @@ To add entries into the lexicon, use the second input line.
 Current classes are Subject, Entity, Action and Attribute.
 
 * Subjects are represented like this: Subject('m', 'hund', known=True)
-where m represents the genus, 'hund' represents the value and known (default = False) represents if the word is known to the system. 
+where 'm' represents the genus, 'hund' represents the value and known (default = False) 
+  represents if the word is known to the system. 
 
-* Actions are specified like this: Action("nehmen","genommen", known=True), where genommen represents the present 
+* Actions are specified like this: Action("nehmen","genommen", known=True), where "genommen" represents the present 
 perfect tense
 
-* Attributes are specified like this: Attribute("laffe", "rund", known=True), where laffe represents the entity which
+* Attributes are specified like this: Attribute("laffe", "rund", known=True), where "laffe" represents the entity which
 is specified by the attribute. It is important that attributes are added only after the entity is added 
 (see order in the list, entities must be above attributes)!
 
+Finally, click generate to generate an output sentence, which will be printed in the console.
 ## Syntax
 
 A .nlg nalgene grammar file is a set of sections separated by a blank line. Every section takes this shape:

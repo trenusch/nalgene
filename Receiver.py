@@ -1,24 +1,25 @@
 import sys
 import time
-import const, helper
+import helper
 import os
 import string
 
 import ipaaca
-
+from main import run
 
 class Receiver:
     def __init__(self, component):
         my_category_interests = ['preverbal']
         in_buffer = ipaaca.InputBuffer("commGoal", my_category_interests)
-        in_buffer.register_handler(self.my_first_iu_handler)
+        in_buffer.register_handler(self.handle_input)
 
 
-    def my_first_iu_handler(self, iu, event_type, local):
+    def handle_input(self, iu, event_type, local):
         if event_type in ['ADDED', 'UPDATED', 'MESSAGE']:
-            elif iu.category == "preverbal":
+            if iu.category == "preverbal":
                 print (iu.category)
                 print(u'Received payload: ' + unicode(iu.payload))
+                run(iu.payload["input"], iu.payload["lexicon"])
 
 
 def signal_handler(signal, frame):
@@ -39,7 +40,7 @@ def main(argv=None):
 
 
     while keepThisComponentRunning:
-        time.sleep(const.updateRate)  # sleep for some time
+        time.sleep(1)  # sleep for some time
 
 
 

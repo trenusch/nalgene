@@ -1,4 +1,6 @@
 from tkinter import *
+
+import Sender
 import main
 class Generator:
 
@@ -120,7 +122,7 @@ class Generator:
             self.lexicon_input.delete(0, self.lexicon_input.size())
             self.lexicon_entry.delete(0, END)
     def generate(self):
-        main.main(self.input.get(0, self.input.size()), self.lexicon_input.get(0, self.lexicon_input.size()))
+        Sender.main(self.input.get(0, self.input.size()), self.lexicon_input.get(0, self.lexicon_input.size()))
 
 root = Tk()
 root.geometry("800x800")

@@ -7,11 +7,11 @@ from words import *
 import ast
 
 
-def main(input, lexicon_input):
-    input_as_json = []
-    for i in input:
-        as_json = ast.literal_eval(i)
-        input_as_json.append(json.dumps(as_json))
+def run(input, lexicon_input):
+    #input_as_json = []
+    #for i in input:
+    #    as_json = ast.literal_eval(i)
+    #    input_as_json.append(json.dumps(as_json))
     mental_lexicon = MentalLexicon()
     for word in lexicon_input:
         item = eval(word)
@@ -19,9 +19,9 @@ def main(input, lexicon_input):
         if type(item) == Attribute:
             mental_lexicon.from_word(item.parent).add_attributes(item)
 
-    produce_multiple(input_as_json, mental_lexicon)
+    produce_multiple(input, mental_lexicon)
 
-
+"""
 if __name__ == '__main__':
     # specify input of the system
     input = []
@@ -120,3 +120,4 @@ if __name__ == '__main__':
     # input.append(json.dumps(dog_in2))
     # input.append(json.dumps(gabel_in))
     produce_multiple(input, mental_lexicon)
+    """

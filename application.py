@@ -1,5 +1,5 @@
 from generate import *
-import ipaaca
+#import ipaaca
 
 """
     creates grammar file + output sentences for every subject given
@@ -55,8 +55,8 @@ def produce_multiple(input, mental_lexicon):
                 file_write.write("    es\n")
     file_write.write("\n")
 
-    file_write.write("$action\n")
     if mental_lexicon.contains_word(item['action']):
+        file_write.write("$action\n")
         file_write.write("    " + mental_lexicon.from_word(item['action']).perfekt + "\n")
     file_write.write("\n")
 
@@ -67,8 +67,8 @@ def produce_multiple(input, mental_lexicon):
         # Der Hund hat die suppe MIT DEM LOEFFEL gegessen -> Mittel
         # Der Hund hat den loeffel AN DER LAFFE gehalten -> Ort
         # Der Hund hat den loeffel NACH OBEN gehalten -> Richtung
-        file_write.write("$object" + "\n")
         if mental_lexicon.contains_word(item['entity']):
+            file_write.write("$object" + "\n")
             if mental_lexicon.from_word(item['entity']).genus == 'm':
                 file_write.write("    den ")
             elif mental_lexicon.from_word(item['entity']).genus == 'f':
@@ -77,10 +77,15 @@ def produce_multiple(input, mental_lexicon):
                 file_write.write("    das ")
             file_write.write(item['entity'] + "\n")
         else:
-            word = mental_lexicon.from_word(item['entity'])
-            if word is not None:
-                for attribute in word.attributes:
-                    file_write.write("    den " + attribute.value + "en\n")
+            attributes = [att for att in positions + properties if att['entity'] == item['entity']
+                          and mental_lexicon.contains_word(att['attribute'])]
+            if len(attributes) != 0:
+                file_write.write("$object" + "\n")
+                for att in attributes:
+                    if att['attribute'][-2:] != "en":
+                        file_write.write("    den " + att['attribute'] + "en\n")
+                    else:
+                        file_write.write("    den " + att['attribute'][0:-1] + "ren\n")
         file_write.write("\n")
 
         # relation is key for generating specific location
@@ -98,7 +103,7 @@ def produce_multiple(input, mental_lexicon):
                 elif object['function'] == 'modality':
                     add_modality(object, attributes, file_write, mental_lexicon)
 
-                    # TODO check for directions related to object
+                    # only added if additional direction is given
                     add_direction(object, directions, file_write, mental_lexicon)
         elif len(objects) >= 1:
             for entity in objects:

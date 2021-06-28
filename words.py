@@ -35,11 +35,10 @@ class Entity(Words):
 
 
 class Attribute(Words):
-    def __init__(self, parent, value, type, known=False):
+    def __init__(self, parent, value, known=False):
         self.known = known
         self.value = value
         self.parent = parent
-        self.type = type
 
 
 class Action(Words):

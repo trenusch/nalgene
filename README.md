@@ -18,55 +18,31 @@ Nalgene generates pairs of sentences and grammar trees by a random (or guided) w
 ## Usage
 
 ```
-$ python generate.py [template.nlg] [entry] [--key=value] ...
+$ python gui.py 
 ```
+Add the desired input in the first input box in the form of a dictionary, e.g.:
 
-By default, generation walks through the template tree from the entry `%` node and chooses phrases and values randomly:
+* {"proposition": "subject", "subject": "hund", "action": "nehmen", "activation": 1.40}
 
-```
-$ python generate.py examples/iot.nlg
-> if the temperature in minnesota is equal to 2 then please turn the office light off thanks
-( %if
-    ( %condition
-        ( %currentWeather
-            ( $location minnesota ) )
-        ( $operator equal to )
-        ( $number 2 ) )
-    ( %setDeviceState
-        ( $device.name office light )
-        ( $device.state off ) ) )
-```
+For the system to work correctly the proposition, name of the entity and activation is mandatory.
+The proposed propositions currently are subject, entity, property, part_of, relpos and direction.
+Additionally, subjects need an action specified with one possible object (entity) and an infostate (new / old). 
+Other entities, who will be the indirect objects of the sentence, need to have a function (location / modality) are the
+current possibilities. The direct object does not need a function. Relpos / part_of relation need the value rel_entity
+specifying the relative entity. Relations and properties also need the value attribute.
 
-You can choose an entry point to start generation from:
+To add entries into the lexicon, use the second input line.
+Current classes are Subject, Entity, Action and Attribute.
 
-```
-$ python generate.py examples/iot.nlg getWeather
-> tell me what it's like in new york
-( %getWeather
-    ( $location new york ) )
-```
+* Subjects are represented like this: Subject('m', 'hund', known=True)
+where m represents the genus, 'hund' represents the value and known (default = False) represents if the word is known to the system. 
 
-You can also supply values from the command line (unspecified values will be randomly chosen):
+* Actions are specified like this: Action("nehmen","genommen", known=True), where genommen represents the present 
+perfect tense
 
-```
-$ python generate.py examples/iot.nlg getWeather --location tokyo
-> what is the weather in tokyo ?
-( %getWeather
-    ( $location tokyo ) )
-```
-
-Or from a JSON file:
-
-```
-$ cat command.json
-{"entry": "%setDeviceState", "values": {"$device.state": "off", "$device.name": "office light"}}
-
-$ cat command.json | python generate.py examples/iot.nlg
-> please turn off the office light
-( %setDeviceState
-    ( $device.state off )
-    ( $device.name office light ) )
-```
+* Attributes are specified like this: Attribute("laffe", "rund", known=True), where laffe represents the entity which
+is specified by the attribute. It is important that attributes are added only after the entity is added 
+(see order in the list, entities must be above attributes)!
 
 ## Syntax
 

@@ -17,7 +17,7 @@ class Generator:
         self.lexicon_input_text = StringVar()
 
         self.lexicon_label = Label(master, text="Lexicon Input: bspw. Subject('m', \"hund\", known=True),"
-                                                " for Attributes: Attribute(\"<object>\", \"value\", \"<type>\", known=True)")
+                                                " for Attributes: Attribute(\"<object>\", \"value\", known=True)")
 
         self.total_label_text = StringVar()
 
@@ -123,7 +123,7 @@ class Generator:
         main.main(self.input.get(0, self.input.size()), self.lexicon_input.get(0, self.lexicon_input.size()))
 
 root = Tk()
-root.geometry("1000x700")
+root.geometry("800x800")
 
 my_gui = Generator(root)
 root.mainloop()

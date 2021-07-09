@@ -1,5 +1,4 @@
 from generate import *
-import ipaaca
 
 """
     creates grammar file + output sentences for every subject given
@@ -14,7 +13,8 @@ def produce_multiple(input, mental_lexicon):
     directions = [json.loads(item) for item in input if json.loads(item)["proposition"] == "direction"]
     relations = [json.loads(item) for item in input if json.loads(item)["proposition"] == "part_of"]
     objects = [json.loads(item) for item in input if json.loads(item)['proposition'] == "entity"]
-    assert len(subjects) == 1
+    if len(subjects) == 0 or len(subjects) > 1:
+        return ""
     item = subjects[0]
     file = open("examples/grammar2.nlg", "r")
     file_write = open("examples/grammar2_complete.nlg", "w")
@@ -133,14 +133,7 @@ def produce_multiple(input, mental_lexicon):
     base_dir = os.path.dirname(filename)
     filename = os.path.basename(filename)
     msg = generate_from_file(base_dir, filename)  # , root_context)
-    print(msg)
-
-    # ipaaca component, throws TypeError (sometimes)
-    outbuffer = ipaaca.OutputBuffer('speech_generator')
-    iu = ipaaca.IU('verbal')
-    iu.payload = {"type": "sentence",
-                  "msg": msg}
-    outbuffer.add(iu)
+    return msg
 
 
 def add_location(entity, attributes, file_write, mental_lexicon):

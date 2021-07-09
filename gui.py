@@ -1,6 +1,5 @@
 from tkinter import *
 
-import Sender
 import main
 class Generator:
 
@@ -9,12 +8,16 @@ class Generator:
         master.title("Natural Language Generator")
 
         self.entered_number = ""
+        self.result = StringVar()
+        self.result.set("Resulting Sentence = ")
 
         self.input = Listbox(selectmode=SINGLE, width=130, height=20)
         self.index = 0
 
         self.lexicon_input = Listbox(selectmode=SINGLE, width=130, height=20)
         self.lexicon_index = 0
+
+        self.result_label = Label(master, textvariable=self.result)
 
         self.lexicon_input_text = StringVar()
 
@@ -53,7 +56,7 @@ class Generator:
 
         # LAYOUT
 
-        self.label.grid(row=0, column=0, columnspan=5, sticky=W)
+        self.label.grid(row=0, column=0, pady=10, columnspan=5, sticky=W)
 
         self.entry.grid(row=1, column=0, columnspan=5, sticky=W+E)
         self.input.grid(row=2, column=0, columnspan=5)
@@ -62,9 +65,9 @@ class Generator:
         self.subtract_button.grid(row=3, column=1, sticky=W)
         self.edit_button.grid(row=3, column=2, sticky=W)
         self.reset_button.grid(row=3, column=3, sticky=W)
-        self.generate_button.grid(row=3, column=4, sticky=W)
+        self.generate_button.grid(row=8, column=4, sticky=W)
 
-        self.lexicon_label.grid(row=5, column=0, columnspan=5, sticky=W)
+        self.lexicon_label.grid(row=5, column=0, pady=10, columnspan=5, sticky=W)
 
         self.lexicon_entry.grid(row=6, column=0, columnspan=5, sticky=W+E)
         self.lexicon_input.grid(row=7, column=0, columnspan=5)
@@ -73,6 +76,8 @@ class Generator:
         self.subtract_button_lexicon.grid(row=8, column=1, sticky=W)
         self.edit_button_lexicon.grid(row=8, column=2, sticky=W)
         self.reset_button_lexicon.grid(row=8, column=3, sticky=W)
+
+        self.result_label.grid(row=9, column=0, pady=10, columnspan=5, sticky=W)
 
 
     def validate(self, new_text):
@@ -116,13 +121,15 @@ class Generator:
             self.lexicon_entry.delete(0, END)
 
         elif method == "edit":
+            self.lexicon_entry.delete(0, END)
             self.lexicon_entry.insert(0, self.lexicon_input.get(self.lexicon_input.curselection()))
 
         else: # reset
             self.lexicon_input.delete(0, self.lexicon_input.size())
             self.lexicon_entry.delete(0, END)
     def generate(self):
-        Sender.main(self.input.get(0, self.input.size()), self.lexicon_input.get(0, self.lexicon_input.size()))
+        self.result.set("Resulting Sentence = " + main.run(self.input.get(0, self.input.size()),
+                                             self.lexicon_input.get(0, self.lexicon_input.size())))
 
 root = Tk()
 root.geometry("800x800")

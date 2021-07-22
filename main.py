@@ -15,7 +15,9 @@ def run(input, lexicon_input):
         item = eval(word)
         mental_lexicon.add_item(item)
         if type(item) == Attribute:
-            mental_lexicon.from_word(item.parent).add_attributes(item)
+            object = mental_lexicon.from_word(item.parent)
+            if object is not None:
+                object.add_attributes(item)
     msg = produce_multiple(input, mental_lexicon)
     if msg is not None:
         return msg

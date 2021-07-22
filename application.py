@@ -68,6 +68,7 @@ def produce_multiple(input, mental_lexicon):
         # Der Hund hat den loeffel AN DER LAFFE gehalten -> Ort
         # Der Hund hat den loeffel NACH OBEN gehalten -> Richtung
         if mental_lexicon.contains_word(item['entity']):
+            dir_object = [obj for obj in objects if obj['entity'] == item['entity']][0]
             file_write.write("$object" + "\n")
             if mental_lexicon.from_word(item['entity']).genus == 'm':
                 file_write.write("    den ")
@@ -87,10 +88,11 @@ def produce_multiple(input, mental_lexicon):
                     else:
                         file_write.write("    den " + att['attribute'][0:-1] + "ren\n")
         file_write.write("\n")
+        add_direction(dir_object, directions, file_write, mental_lexicon)
 
         # relation is key for generating specific location
         part_of = [rel for rel in relations if rel['rel_entity'] == item['entity']]
-        if len(part_of) == 1:  # should be 1, produce location addition
+        if len(part_of) == 1:  # should be 1, produce object addition
             relation = part_of[0]
             object = [obj for obj in objects if obj['entity'] == relation['entity']][0]
             objects = [obj for obj in objects if obj['entity'] != relation['entity']]
@@ -105,7 +107,7 @@ def produce_multiple(input, mental_lexicon):
 
                     # only added if additional direction is given
                     add_direction(object, directions, file_write, mental_lexicon)
-        elif len(objects) >= 1:
+        if len(objects) >= 1:
             for entity in objects:
                 try:
                     if entity['function'] == "modality":

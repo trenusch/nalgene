@@ -1,12 +1,26 @@
+from words import *
+
+
 class MentalLexicon:
     def __init__(self):
         self.items = []
         self.words = []
 
     def add_item(self, item):
-        self.items.append(item)
-        if item.known:
-            self.words.append(item.value)
+        item = eval(item)
+        if item not in self.items:
+            self.items.append(item)
+            if item.known:
+                self.words.append(item.value)
+        else:
+            self.items.remove(item)
+            self.items.append(item)
+            if item.known:
+                self.words.append(item.value)
+        if type(item) == Attribute:
+            parent = self.from_word(item.parent)
+            if parent is not None:
+                parent.add_attribute(item)
 
     def contains_word(self, item):
         return item in self.words

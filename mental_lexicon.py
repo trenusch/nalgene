@@ -30,3 +30,6 @@ class MentalLexicon:
             return [item for item in self.items if item.value == word][0]
         except IndexError as e:
             return None
+
+    def contains_concept(self, item):
+        return item in [item.value for item in self.items]

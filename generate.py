@@ -162,6 +162,8 @@ def generate_from_file(base_dir, filename, root_context=None):
         parsed['%'].remove_child(sentence)
 
     # remove sentences not using all given phrases
+    if len(parsed['%']) == 0:
+        return ""
     to_remove = {}
     for child in parsed:
         if not child.is_leaf and child.split(' ')[0] != '%':

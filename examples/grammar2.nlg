@@ -1,10 +1,10 @@
 %
-    $subject hat $action
-    $subject hat $object $action
-    $subject hat $object $location! $action
-    $subject hat $object $modality! $action
-    $subject hat $object $direction $action
-    $subject hat $object $modality! $direction $action
-    $location! hat $subject $object $action
-    $modality! hat $subject $object $action
-    $modality! $direction hat $subject $object $action
+    $subject! hat $action
+    $subject! hat $object! $action
+    $subject! hat $object! $location! $action
+    $subject! hat $object! $modality! $action
+    $subject! hat $object! $direction $action
+    $subject! hat $object! $modality! $direction $action
+    $location! hat $subject! $object! $action
+    $modality! hat $subject! $object! $action
+    $modality! $direction hat $subject! $object $action

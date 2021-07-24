@@ -24,8 +24,8 @@ def produce_multiple(input, mental_lexicon):
         file_write.write(line)
     file_write.write("\n")
 
-    file_write.write("$subject\n")
     if mental_lexicon.contains_word(item['subject']):
+        file_write.write("$subject!\n")
         if item['infostate'] == "new":
             if mental_lexicon.from_word(item['subject']).genus == 'm':
                 file_write.write("    der ")
@@ -33,26 +33,32 @@ def produce_multiple(input, mental_lexicon):
                 file_write.write("    die ")
             else:
                 file_write.write("    das ")
-            file_write.write(item['subject'] + "\n")
+            file_write.write(item['subject'] + "1.0/\n")
         else:
             if mental_lexicon.from_word(item['subject']).genus == 'm':
-                file_write.write("    er\n")
+                file_write.write("    er1.0/\n")
             elif mental_lexicon.from_word(item['subject']).genus == 'f':
-                file_write.write("    sie\n")
+                file_write.write("    sie1.0/\n")
             else:
-                file_write.write("    es\n")
+                file_write.write("    es1.0/\n")
     else:
-        attributes = [att for att in mental_lexicon.from_word(item['subject']).attributes]
-        if item['infostate'] == "new":
-            for attribute in attributes:
-                file_write.write("    das " + attribute.value + "e\n")
-        else:
-            if mental_lexicon.from_word(item['subject']).genus == 'm':
-                file_write.write("    er\n")
-            elif mental_lexicon.from_word(item['subject']).genus == 'f':
-                file_write.write("    sie\n")
+        if mental_lexicon.contains_concept(item['subject']):
+            file_write.write("$subject!\n")
+            attributes = [att for att in mental_lexicon.from_word(item['subject']).attributes]
+            if item['infostate'] == "new":
+                for attribute in attributes:
+                    file_write.write("    das " + attribute.value + "e" + str(item['activation']) +"/\n")
+                if len(attributes) == 0:
+                    file_write.write("    der aeh1.0/\n")
+                    # TODO: add gesture
             else:
-                file_write.write("    es\n")
+                if mental_lexicon.from_word(item['subject']).genus == 'm':
+                    file_write.write("    er1.0/\n")
+                elif mental_lexicon.from_word(item['subject']).genus == 'f':
+                    file_write.write("    sie1.0/\n")
+                else:
+                    file_write.write("    es1.0/\n")
+
     file_write.write("\n")
 
     if mental_lexicon.contains_word(item['action']):
@@ -67,27 +73,41 @@ def produce_multiple(input, mental_lexicon):
         # Der Hund hat die suppe MIT DEM LOEFFEL gegessen -> Mittel
         # Der Hund hat den loeffel AN DER LAFFE gehalten -> Ort
         # Der Hund hat den loeffel NACH OBEN gehalten -> Richtung
+        dir_object = {}
         if mental_lexicon.contains_word(item['entity']):
             dir_object = [obj for obj in objects if obj['entity'] == item['entity']][0]
-            file_write.write("$object" + "\n")
+            file_write.write("$object!" + "\n")
             if mental_lexicon.from_word(item['entity']).genus == 'm':
                 file_write.write("    den ")
             elif mental_lexicon.from_word(item['entity']).genus == 'f':
                 file_write.write("    die ")
             else:
                 file_write.write("    das ")
-            file_write.write(item['entity'] + "\n")
+            file_write.write(item['entity'] + "1.0/\n")
         else:
             attributes = [att for att in positions + properties if att['entity'] == item['entity']
                           and mental_lexicon.contains_word(att['attribute'])]
             if len(attributes) != 0:
-                file_write.write("$object" + "\n")
+                file_write.write("$object!\n")
                 for att in attributes:
                     if att['attribute'][-2:] != "en":
-                        file_write.write("    den " + att['attribute'] + "en\n")
+                        file_write.write("    den " + att['attribute'] + "en" + str(att['activation']) + "/\n")
                     else:
-                        file_write.write("    den " + att['attribute'][0:-1] + "ren\n")
+                        file_write.write("    den " + att['attribute'][0:-1] + "ren" + str(att['activation']) + "/\n")
+            else:
+                if mental_lexicon.contains_concept(item['entity']):
+                    file_write.write("$object!\n")
+                    if mental_lexicon.from_word(item['entity']).genus == 'm':
+                        file_write.write("    den ")
+                    elif mental_lexicon.from_word(item['entity']).genus == 'f':
+                        file_write.write("    die ")
+                    else:
+                        file_write.write("    das ")
+                    file_write.write("aehm1.0/\n")
+                # TODO: add gesture
+
         file_write.write("\n")
+
         add_direction(dir_object, directions, file_write, mental_lexicon)
 
         # relation is key for generating specific location
@@ -114,9 +134,7 @@ def produce_multiple(input, mental_lexicon):
                         attributes = [att for att in positions + properties
                                       if att['entity'] == entity['entity']
                                       and mental_lexicon.contains_word(att['attribute'])]
-                        if len(attributes) != 0 or mental_lexicon.contains_word(entity['entity']):
-                            add_modality(entity, attributes, file_write, mental_lexicon)
-
+                        add_modality(entity, attributes, file_write, mental_lexicon)
                         add_direction(entity, directions, file_write, mental_lexicon)
 
                     # TODO elif entity['function'] == "?" possibility to extend with different functions
@@ -151,6 +169,9 @@ def add_location(entity, attributes, file_write, mental_lexicon):
                 file_write.write("    am " + att['attribute'] + "en" + str(att["activation"]) + "/\n")
             elif att['proposition'] == 'relpos':
                 file_write.write("    " + att['attribute'] + str(att["activation"]) + "/\n")
+        if len(attributes) == 0:
+            file_write.write("    da1.0/\n")
+            # TODO: add gesture
 
 
 def add_modality(entity, attributes, file_write, mental_lexicon):
@@ -171,6 +192,9 @@ def add_modality(entity, attributes, file_write, mental_lexicon):
                 else:
                     file_write.write("    mit dem " + att['attribute'][0:-1] + "ren"
                                      + str(att["activation"]) + "/\n")
+        if len(attributes) == 0:
+            file_write.write("    so1.0/\n")
+            # TODO: add gesture
 
 
 def add_direction(entity, directions, file_write, mental_lexicon):
@@ -181,3 +205,7 @@ def add_direction(entity, directions, file_write, mental_lexicon):
 
         file_write.write("$direction\n")
         file_write.write("    nach " + str(dir['attribute']) + "\n")
+    elif len([dir for dir in directions if dir['entity'] == entity['entity']]) == 1:
+        file_write.write("$direction\n")
+        file_write.write("    nach da\n")
+        # TODO: add gesture

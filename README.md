@@ -18,12 +18,10 @@ Nalgene generates pairs of sentences and grammar trees by a random (or guided) w
 ## Usage
 
 ```
-$ mosquitto
-$ python Receiver.py
 $ python gui.py 
 ```
-Start mosquitto and the listener. Afterwards, start the gui which will send a message to the listener
-with the desired input (could also come from another module!). 
+Start the gui which will send a message to the listener
+with the desired input. 
 Add the desired input in the first input box in the form of a dictionary, e.g.:
 
 * {"proposition": "subject", "subject": "hund", "action": "nehmen", "activation": 1.40}
@@ -49,7 +47,7 @@ perfect tense
 is specified by the attribute. It is important that attributes are added only after the entity is added 
 (see order in the list, entities must be above attributes)!
 
-Finally, click generate to generate an output sentence, which will be printed in the console.
+Finally, click generate to generate an output sentence, which can be seen in the bottom.
 ## Syntax
 
 A .nlg nalgene grammar file is a set of sections separated by a blank line. Every section takes this shape:

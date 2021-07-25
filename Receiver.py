@@ -20,12 +20,12 @@ class Receiver:
     def handle_input(self, iu, event_type, local):
         if event_type in ['ADDED', 'UPDATED', 'MESSAGE']:
             if iu.category == "preverbal":
-                print (iu.category)
-                print(u'Received payload: ' + unicode(iu.payload))
+                #print (iu.category)
+                #print(u'Received payload: ' + unicode(iu.payload))
                 produce_multiple(iu.payload["input"], self.lexicon)
             elif iu.category == "lexicon":
-                print (iu.category)
-                print(u'Received payload: ' + unicode(iu.payload))
+                #print (iu.category)
+                #print(u'Received payload: ' + unicode(iu.payload))
                 self.lexicon.add_item(iu.payload["entry"])
 
 def signal_handler(signal, frame):

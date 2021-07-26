@@ -119,14 +119,13 @@ def produce_multiple(input, mental_lexicon):
             attributes = [att for att in positions + properties
                           if att['entity'] == object['entity']
                           and mental_lexicon.contains_word(att['attribute'])]
-            if len(attributes) != 0 or mental_lexicon.contains_word(object['entity']):
-                if object['function'] == 'location':
-                    add_location(object, attributes, file_write, mental_lexicon)
-                elif object['function'] == 'modality':
-                    add_modality(object, attributes, file_write, mental_lexicon)
+            if object['function'] == 'location':
+                add_location(object, attributes, file_write, mental_lexicon)
+            elif object['function'] == 'modality':
+                add_modality(object, attributes, file_write, mental_lexicon)
 
-                    # only added if additional direction is given
-                    add_direction(object, directions, file_write, mental_lexicon)
+                # only added if additional direction is given
+                add_direction(object, directions, file_write, mental_lexicon)
         if len(objects) >= 1:
             for entity in objects:
                 try:

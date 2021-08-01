@@ -1,4 +1,6 @@
 import json
+import sys
+
 from application import produce_multiple
 from mental_lexicon import MentalLexicon
 from words import *
@@ -17,7 +19,7 @@ if __name__ == "__main__":
 
     loeffel = Entity("m", "loeffel", False)
     lexicon.add_item(loeffel)
-    input.clear()
+    input = []
     input.append(json.dumps({"proposition": "subject", "subject": "hund", "infostate": "new", "action": "nehmen",
                              "entity": "loeffel", "activation": 2.0}))
     input.append(json.dumps({"proposition": "entity", "entity": "loeffel", "activation": 1.5}))
@@ -71,7 +73,7 @@ if __name__ == "__main__":
 
     hund.known = True
     lexicon.add_item(hund)
-    input.clear()
+    input = []
     input.append(json.dumps({"proposition": "subject", "subject": "hund", "infostate": "old", "action": "nehmen",
                              "entity": "loeffel", "activation": 2.0}))
     input.append(json.dumps({"proposition": "entity", "entity": "loeffel", "activation": 1.5}))

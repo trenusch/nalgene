@@ -74,37 +74,39 @@ def produce_multiple(input, mental_lexicon):
         # Der Hund hat den loeffel AN DER LAFFE gehalten -> Ort
         # Der Hund hat den loeffel NACH OBEN gehalten -> Richtung
         dir_object = {}
-        if mental_lexicon.contains_word(item['entity']):
-            dir_object = [obj for obj in objects if obj['entity'] == item['entity']][0]
-            file_write.write("$object!" + "\n")
-            if mental_lexicon.from_word(item['entity']).genus == 'm':
-                file_write.write("    den ")
-            elif mental_lexicon.from_word(item['entity']).genus == 'f':
-                file_write.write("    die ")
+        if len([obj for obj in objects if obj['entity'] == item['entity']]) != 0:
+            if mental_lexicon.contains_word(item['entity']):
+                dir_object = [obj for obj in objects if obj['entity'] == item['entity']][0]
+                file_write.write("$object!" + "\n")
+                if mental_lexicon.from_word(item['entity']).genus == 'm':
+                    file_write.write("    den ")
+                elif mental_lexicon.from_word(item['entity']).genus == 'f':
+                    file_write.write("    die ")
+                else:
+                    file_write.write("    das ")
+                file_write.write(item['entity'] + "1.0/\n")
             else:
-                file_write.write("    das ")
-            file_write.write(item['entity'] + "1.0/\n")
-        else:
-            attributes = [att for att in positions + properties if att['entity'] == item['entity']
-                          and mental_lexicon.contains_word(att['attribute'])]
-            if len(attributes) != 0:
-                file_write.write("$object!\n")
-                for att in attributes:
-                    if att['attribute'][-2:] != "en":
-                        file_write.write("    den " + att['attribute'] + "en" + str(att['activation']) + "/\n")
-                    else:
-                        file_write.write("    den " + att['attribute'][0:-1] + "ren" + str(att['activation']) + "/\n")
-            else:
-                if mental_lexicon.contains_concept(item['entity']):
+                attributes = [att for att in positions + properties if att['entity'] == item['entity']
+                              and mental_lexicon.contains_word(att['attribute'])]
+                if len(attributes) != 0:
                     file_write.write("$object!\n")
-                    if mental_lexicon.from_word(item['entity']).genus == 'm':
-                        file_write.write("    den ")
-                    elif mental_lexicon.from_word(item['entity']).genus == 'f':
-                        file_write.write("    die ")
-                    else:
-                        file_write.write("    das ")
-                    file_write.write("aehm1.0/\n")
-                # TODO: add gesture
+                    for att in attributes:
+                        if att['attribute'][-2:] != "en":
+                            file_write.write("    den " + att['attribute'] + "en" + str(att['activation']) + "/\n")
+                        else:
+                            file_write.write(
+                                "    den " + att['attribute'][0:-1] + "ren" + str(att['activation']) + "/\n")
+                else:
+                    if mental_lexicon.contains_concept(item['entity']):
+                        file_write.write("$object!\n")
+                        if mental_lexicon.from_word(item['entity']).genus == 'm':
+                            file_write.write("    den ")
+                        elif mental_lexicon.from_word(item['entity']).genus == 'f':
+                            file_write.write("    die ")
+                        else:
+                            file_write.write("    das ")
+                        file_write.write("aehm1.0/\n")
+                    # TODO: add gesture
 
         file_write.write("\n")
 

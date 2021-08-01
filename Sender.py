@@ -13,7 +13,7 @@ if __name__ == '__main__':
     outBuffer.add(msg)
 
     msg = ipaaca.IU("lexicon")
-    msg.payload = {"entry": "Entity(\"m\", \"loeffel\", True)"}
+    msg.payload = {"entry": "Entity(\"m\", \"loeffel\", False)"}
     outBuffer.add(msg)
 
     msg = ipaaca.IU("preverbal")
@@ -25,7 +25,11 @@ if __name__ == '__main__':
               "action": "nehmen",
               "activation": 2.4,
               "infostate": "new"}
+    loeffel_in = {"proposition": "entity",
+                  "entity": "loeffel",
+                  "activation": 2.0}
 
     input_as_json.append(json.dumps(dog_in))
+    input_as_json.append(json.dumps(loeffel_in))
     msg.payload = {"input": input_as_json}
     outBuffer.add(msg)

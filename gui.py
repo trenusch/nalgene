@@ -11,10 +11,10 @@ class Generator:
         self.result = StringVar()
         self.result.set("Resulting Sentence = ")
 
-        self.input = Listbox(selectmode=SINGLE, width=130, height=20)
+        self.input = Listbox(selectmode=SINGLE, width=130, height=10)
         self.index = 0
 
-        self.lexicon_input = Listbox(selectmode=SINGLE, width=130, height=20)
+        self.lexicon_input = Listbox(selectmode=SINGLE, width=130, height=10)
         self.lexicon_index = 0
 
         self.result_label = Label(master, textvariable=self.result)

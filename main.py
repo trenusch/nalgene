@@ -7,19 +7,30 @@ import ast
 
 def run(input, lexicon_input):
     input_as_json = []
-    for i in input:
-        as_json = ast.literal_eval(i)
-        input_as_json.append(json.dumps(as_json))
+    if len(input) == 1 and input[0][0:7] == "input =":
+        input_as_list = eval(input[0][7:])
+        for i in input_as_list:
+            input_as_json.append(json.dumps(i))
+    else:
+        for i in input:
+            as_json = ast.literal_eval(i)
+            input_as_json.append(json.dumps(as_json))
     mental_lexicon = MentalLexicon()
+    if len(lexicon_input) == 1 and lexicon_input[0][0:7] == "input =":
+        lexicon_input = eval(lexicon_input[0][7:])
     for word in lexicon_input:
-        item = eval(word)
-        mental_lexicon.add_item(item)
-        if type(item) == Attribute:
-            object = mental_lexicon.from_word(item.parent)
+        mental_lexicon.add_item(word)
+        if type(word) == Attribute:
+            object = mental_lexicon.from_word(word.parent)
             if object is not None:
-                object.add_attributes(item)
-    msg = produce_multiple(input, mental_lexicon)
+                object.add_attributes(word)
+    msg = produce_multiple(input_as_json, mental_lexicon)
     if msg is not None:
         return msg
     else:
         return ""
+
+input = [{"proposition": "subject", "subject": "hund", "infostate": "old",
+          "activation": 2.4, "entity": "loeffel", "action": "nehmen"},
+         {"proposition": "entity", "entity": "loeffel", "activation": 2.0}]
+input = [Subject("m", "hund", True), Entity("m", "loeffel", True), Action("nehmen", "genommen", True)]

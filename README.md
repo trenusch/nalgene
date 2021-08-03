@@ -1,35 +1,28 @@
-# nalgene
+# nalgene_trenusch
 
-A natural language generation language, intended for creating training data for intent parsing systems.
-
-## Overview
-
-Nalgene generates pairs of sentences and grammar trees by a random (or guided) walk through a grammar file.
-
-* Sentence: the natural language sentence, e.g. "turn on the light"
-* Tree: a nested list of tokens ([an s-expression](https://en.wikipedia.org/wiki/S-expression)) generated alongside the sentence, e.g.
-
-	```
-    ( %setDeviceState
-        ( $device.name light )
-        ( $device.state on ) ) )
-	```
+A natural language generation tool for creating natural language output from structured input data
 
 ## Usage
 
 ```
 $ python gui.py 
 ```
-Start the gui which will send a message to the listener
+Start the gui which will call the application
 with the desired input. 
-Add the desired input in the first input box in the form of a dictionary, e.g.:
+Add the desired input entries in the first input box in the form of a dictionary, e.g.:
 
 * {"proposition": "subject", "subject": "hund", "action": "nehmen", "activation": 1.40}
+
+Or, specify all entries in one list preceded by the key "input =":
+
+* input = [{"proposition": "subject", "subject": "hund", "infostate": "old",
+          "activation": 2.4, "entity": "loeffel", "action": "nehmen"},
+         {"proposition": "entity", "entity": "loeffel", "activation": 2.0}]
 
 For the system to work correctly the proposition, name of the entity and activation is mandatory.
 The proposed propositions currently are subject, entity, property, part_of, relpos and direction.
 Additionally, subjects need an action specified with one possible object (entity) and an infostate (new / old). 
-Other entities, who will be the indirect objects of the sentence, need to have a function (location / modality) are the
+Other entities, who will be the indirect objects of the sentence, need to have a function. Location / modality are the
 current possibilities. The direct object does not need a function. Relpos / part_of relation need the value rel_entity
 specifying the relative entity. Relations and properties also need the value attribute.
 
@@ -46,6 +39,10 @@ perfect tense
 * Attributes are specified like this: Attribute("laffe", "rund", known=True), where "laffe" represents the entity which
 is specified by the attribute. It is important that attributes are added only after the entity is added 
 (see order in the list, entities must be above attributes)!
+  
+Alternatively, similar as above, a list of objects can be added directly (with the key "input ="):
+
+* input = [Subject("m", "hund", True), Entity("m", "loeffel", True), Action("nehmen", "genommen", True)]
 
 Finally, click generate to generate an output sentence, which can be seen in the bottom.
 ## Syntax

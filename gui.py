@@ -1,6 +1,8 @@
 from tkinter import *
 
 import main
+
+
 class Generator:
 
     def __init__(self, master):
@@ -11,10 +13,10 @@ class Generator:
         self.result = StringVar()
         self.result.set("Resulting Sentence = ")
 
-        self.input = Listbox(selectmode=SINGLE, width=130, height=10)
+        self.input = Listbox(selectmode=SINGLE, width=130, height=15)
         self.index = 0
 
-        self.lexicon_input = Listbox(selectmode=SINGLE, width=130, height=10)
+        self.lexicon_input = Listbox(selectmode=SINGLE, width=130, height=15)
         self.lexicon_index = 0
 
         self.result_label = Label(master, textvariable=self.result)
@@ -31,7 +33,7 @@ class Generator:
         vcmd_lexicon = master.register(self.validate)
         self.lexicon_entry = Entry(master, validate="key", validatecommand=(vcmd_lexicon, '%P'))
 
-        vcmd = master.register(self.validate) # we have to wrap the command
+        vcmd = master.register(self.validate)  # we have to wrap the command
         self.entry = Entry(master, validate="key", validatecommand=(vcmd, '%P'))
 
         def enter_lexicon(event):
@@ -58,7 +60,7 @@ class Generator:
 
         self.label.grid(row=0, column=0, pady=10, columnspan=5, sticky=W)
 
-        self.entry.grid(row=1, column=0, columnspan=5, sticky=W+E)
+        self.entry.grid(row=1, column=0, columnspan=5, sticky=W + E)
         self.input.grid(row=2, column=0, columnspan=5)
 
         self.add_button.grid(row=3, column=0, sticky=W)
@@ -69,7 +71,7 @@ class Generator:
 
         self.lexicon_label.grid(row=5, column=0, pady=10, columnspan=5, sticky=W)
 
-        self.lexicon_entry.grid(row=6, column=0, columnspan=5, sticky=W+E)
+        self.lexicon_entry.grid(row=6, column=0, columnspan=5, sticky=W + E)
         self.lexicon_input.grid(row=7, column=0, columnspan=5)
 
         self.add_button_lexicon.grid(row=8, column=0, sticky=W)
@@ -79,9 +81,8 @@ class Generator:
 
         self.result_label.grid(row=9, column=0, pady=10, columnspan=5, sticky=W)
 
-
     def validate(self, new_text):
-        if not new_text: # the field is being cleared
+        if not new_text:  # the field is being cleared
             self.entered_number = ""
             return True
 
@@ -105,7 +106,7 @@ class Generator:
         elif method == "edit":
             self.entry.insert(0, self.input.get(self.input.curselection()))
 
-        else: # reset
+        else:  # reset
             self.input.delete(0, self.input.size())
             self.entry.delete(0, END)
 
@@ -124,12 +125,14 @@ class Generator:
             self.lexicon_entry.delete(0, END)
             self.lexicon_entry.insert(0, self.lexicon_input.get(self.lexicon_input.curselection()))
 
-        else: # reset
+        else:  # reset
             self.lexicon_input.delete(0, self.lexicon_input.size())
             self.lexicon_entry.delete(0, END)
+
     def generate(self):
         self.result.set("Resulting Sentence = " + main.run(self.input.get(0, self.input.size()),
-                                             self.lexicon_input.get(0, self.lexicon_input.size())))
+                                                           self.lexicon_input.get(0, self.lexicon_input.size())))
+
 
 root = Tk()
 root.geometry("800x800")

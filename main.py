@@ -29,8 +29,3 @@ def run(input, lexicon_input):
         return msg
     else:
         return ""
-
-input = [{"proposition": "subject", "subject": "hund", "infostate": "old",
-          "activation": 2.4, "entity": "loeffel", "action": "nehmen"},
-         {"proposition": "entity", "entity": "loeffel", "activation": 2.0}]
-input = [Subject("m", "hund", True), Entity("m", "loeffel", True), Action("nehmen", "genommen", True)]

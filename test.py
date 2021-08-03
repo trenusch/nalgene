@@ -89,3 +89,19 @@ if __name__ == "__main__":
     assert (sentence == "Er hat den loeffel mit dem laenglichen genommen." or
             sentence == "Mit dem laenglichen hat er den loeffel genommen.")
 
+    input.append(json.dumps({"proposition": "direction", "attribute": "oben", "entity": "stiel", "activation": 2.4}))
+    sentence = produce_multiple(input, lexicon)
+    assert (sentence == "Er hat den loeffel mit dem laenglichen genommen." or
+            sentence == "Mit dem laenglichen hat er den loeffel genommen.")
+
+    oben = Attribute("stiel", "oben", True)
+    lexicon.add_item(oben)
+    sentence = produce_multiple(input, lexicon)
+    assert (sentence == "Er hat den loeffel mit dem laenglichen nach oben genommen." or
+            sentence == "Mit dem laenglichen nach oben hat er den loeffel genommen.")
+
+    oben.known = False
+    lexicon.add_item(oben)
+    sentence = produce_multiple(input, lexicon)
+    assert (sentence == "Er hat den loeffel mit dem laenglichen nach da genommen." or
+            sentence == "Mit dem laenglichen nach da hat er den loeffel genommen.")

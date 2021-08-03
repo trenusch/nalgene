@@ -1,19 +1,7 @@
 # nalgene
 
-A natural language generation language, intended for creating training data for intent parsing systems.
+A natural language generation tool for creating natural language output from structured input data.
 
-## Overview
-
-Nalgene generates pairs of sentences and grammar trees by a random (or guided) walk through a grammar file.
-
-* Sentence: the natural language sentence, e.g. "turn on the light"
-* Tree: a nested list of tokens ([an s-expression](https://en.wikipedia.org/wiki/S-expression)) generated alongside the sentence, e.g.
-
-	```
-    ( %setDeviceState
-        ( $device.name light )
-        ( $device.state on ) ) )
-	```
 
 ## Usage
 
@@ -21,7 +9,8 @@ Nalgene generates pairs of sentences and grammar trees by a random (or guided) w
 $ mosquitto
 $ python Receiver.py
 ```
-Set up a conda environment using either Python 2. Install ipaaca using the scsbuild.py (https://gitlab.ub.uni-bielefeld.de/scs/scsbuild).
+Set up a conda environment using either Python 2 or Python 3. Install ipaaca using the scsbuild.py 
+(https://gitlab.ub.uni-bielefeld.de/scs/scsbuild for further details).
 Start mosquitto and the receiver, which initializes the lexicon (initial entries can be specified in the file).
 Afterwards, messages can be send to the listener
 with the desired input or lexicon entries. The corresponding output is put into an output buffer by the system.

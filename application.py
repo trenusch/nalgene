@@ -1,5 +1,5 @@
 from generate import *
-
+import ipaaca
 """
     creates grammar file + output sentences for every subject given
     adds entries for objects / actions specified in subject

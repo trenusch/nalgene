@@ -33,3 +33,9 @@ class MentalLexicon:
 
     def contains_concept(self, item):
         return item in [item.value for item in self.items]
+
+    def remove_item(self, item):
+        if item.value in self.words:
+            self.words.remove(item.value)
+        if item in self.items:
+            self.items.remove(item)

@@ -1,19 +1,18 @@
 %
-    $subject hat $object0 $action
-    $subject hat $object0 $location0! $action
-    $location0! hat $subject $object0 $action
-    $subject hat $action
-    $subject hat $object0 $object1 $action
+    $subject! hat $action
+    $subject! hat $object! $action
+    $subject! hat $object! $location! $action
+    $subject! hat $object! $modality! $action
+    $subject! hat $object! $direction $action
+    $subject! hat $object! $modality! $direction $action
+    $location! hat $subject! $object! $action
+    $modality! hat $subject! $object! $action
+    $modality! $direction hat $subject! $object $action
 
-$subject
-    der hund
+$subject!
+    er1.0/
 
 $action
     genommen
 
-$object0
-    den loeffel
 
-$location0!
-    gewoelbt1./
-    unten1./

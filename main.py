@@ -18,12 +18,19 @@ def run(input, lexicon_input):
     mental_lexicon = MentalLexicon()
     if len(lexicon_input) == 1 and lexicon_input[0][0:7] == "input =":
         lexicon_input = eval(lexicon_input[0][7:])
-    for word in lexicon_input:
-        mental_lexicon.add_item(word)
-        if type(word) == Attribute:
-            object = mental_lexicon.from_word(word.parent)
-            if object is not None:
-                object.add_attributes(word)
+        for word in lexicon_input:
+            mental_lexicon.add_item(word)
+            if type(word) == Attribute:
+                object = mental_lexicon.from_word(word.parent)
+                if object is not None:
+                    object.add_attributes(word)
+    else:
+        for word in lexicon_input:
+            mental_lexicon.add_item(eval(word))
+            if type(word) == Attribute:
+                object = mental_lexicon.from_word(word.parent)
+                if object is not None:
+                    object.add_attributes(word)
     msg = produce_multiple(input_as_json, mental_lexicon)
     if msg is not None:
         return msg
